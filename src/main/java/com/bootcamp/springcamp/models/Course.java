@@ -1,6 +1,8 @@
 package com.bootcamp.springcamp.models;
 
 import com.bootcamp.springcamp.utils.Skill;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -17,28 +19,39 @@ import java.time.LocalDateTime;
 public class Course {
     @Id
     private String id;
-    public String title;
-    public String description;
-    public String weeks;
-    public Double tuition;
-    public Skill minimumSkill;
-    public Boolean scholarshipAvailable;
-    public LocalDateTime createdAt;
+
+    @NotEmpty(message = "Please add a course title")
+    private String title;
+
+    @NotEmpty(message = "Please add a description")
+    private String description;
+
+    @NotEmpty(message = "Please add number of weeks")
+    private String weeks;
+
+    @NotNull(message = "Please add a tuition cost")
+    private Double tuition;
+
+    @NotNull(message = "Please add a minimum skill")
+    private Skill minimumSkill;
+
+    private Boolean scholarshipAvailable;
+    private LocalDateTime createdAt;
 
     @DocumentReference
-    public Bootcamp bootcamp;
+    private Bootcamp bootcamp;
 
     @DocumentReference
-    public User user;
+    private User user;
 
-    public Course(String title, String description, String weeks, Double tuition, Skill minimumSkill, Boolean scholarshipAvailable, LocalDateTime createdAt, Bootcamp bootcamp, User user) {
+    public Course(String title, String description, String weeks, Double tuition, Skill minimumSkill, Bootcamp bootcamp, User user) {
         this.title = title;
         this.description = description;
         this.weeks = weeks;
         this.tuition = tuition;
         this.minimumSkill = minimumSkill;
-        this.scholarshipAvailable = scholarshipAvailable;
-        this.createdAt = createdAt;
+        this.scholarshipAvailable = false;
+        this.createdAt = LocalDateTime.now();
         this.bootcamp = bootcamp;
         this.user = user;
     }
