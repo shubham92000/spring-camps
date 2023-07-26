@@ -50,11 +50,9 @@ public class Bootcamp {
     @Size(min = 1, message = "add atleast one career option")
     private List<Career> careers;
 
-    @Size(min = 1, message = "Rating must be atleast 1")
-    @Size(min = 10, message = "Rating cannot be more than 10")
-    private Double averageRating;
+    private List<Double> ratings;
 
-    private Double averageCost;
+    private List<Double> costs;
 
     private String photo;
 
@@ -72,8 +70,8 @@ public class Bootcamp {
     public List<Course> courses;
 
     public Bootcamp() {
-        this.averageRating = 0.0;
-        this.averageCost = 0.0;
+        this.ratings = List.of();
+        this.costs = List.of();
         this.housing = false;
         this.jobAssistance = false;
         this.jobGuarantee = false;
