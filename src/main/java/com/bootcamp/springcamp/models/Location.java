@@ -15,9 +15,4 @@ public class Location {
     private LocationType type;
     private List<Double> coordinates;
     private String formattedAddress;
-    private String street;
-    private String city;
-    private String state;
-    private String zipcode;
-    private String country;
 }

@@ -40,14 +40,14 @@ public class Bootcamp {
 
     private String email;
 
-    @NotEmpty(message = "Please add an address")
-    private String address;
+    @NotNull
+    private Address address;
 
     @NotNull
     private Location location;
 
     @NotNull
-    @Size(min = 1, message = "add atleat one career option")
+    @Size(min = 1, message = "add atleast one career option")
     private List<Career> careers;
 
     @Size(min = 1, message = "Rating must be atleast 1")
