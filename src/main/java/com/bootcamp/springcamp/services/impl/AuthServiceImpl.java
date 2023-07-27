@@ -15,7 +15,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,12 +26,14 @@ public class AuthServiceImpl implements AuthService {
     private UserRepo userRepo;
     private JwtTokenProvider jwtTokenProvider;
     private UserDetailsService userDetailsService;
+    private PasswordEncoder passwordEncoder;
 
-    public AuthServiceImpl(AuthenticationManager authenticationManager, UserRepo userRepo, JwtTokenProvider jwtTokenProvider, UserDetailsService userDetailsService) {
+    public AuthServiceImpl(AuthenticationManager authenticationManager, UserRepo userRepo, JwtTokenProvider jwtTokenProvider, UserDetailsService userDetailsService, PasswordEncoder passwordEncoder) {
         this.authenticationManager = authenticationManager;
         this.userRepo = userRepo;
         this.jwtTokenProvider = jwtTokenProvider;
         this.userDetailsService = userDetailsService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -64,7 +66,7 @@ public class AuthServiceImpl implements AuthService {
         User user = new User();
         user.setName(registerDto.getName());
         user.setEmail(registerDto.getEmail());
-        user.setPassword(registerDto.getPassword());
+        user.setPassword(passwordEncoder.encode(registerDto.getPassword()));
         user.setRoles(List.of(role));
 
         user = userRepo.save(user);

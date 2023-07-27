@@ -5,7 +5,6 @@ import com.bootcamp.springcamp.dtos.LoginResDto;
 import com.bootcamp.springcamp.dtos.RegisterReqDto;
 import com.bootcamp.springcamp.dtos.RegisterResDto;
 import com.bootcamp.springcamp.services.AuthService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
