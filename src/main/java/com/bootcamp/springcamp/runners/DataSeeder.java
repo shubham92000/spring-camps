@@ -20,7 +20,11 @@ public class DataSeeder implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         List<Role> roles = List.of(Role.user);
-        User u1 = new User("john", "john@gmail.com", roles, "123456");
+        User u1 = new User();
+        u1.setName("john");
+        u1.setEmail("john@gmail.com");
+        u1.setRoles(roles);
+        u1.setPassword("123456");
         u1 = userRepo.save(u1);
         System.out.println(u1);
     }

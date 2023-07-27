@@ -13,7 +13,6 @@ import java.util.List;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
 @ToString
 @Document(collection = "users")
@@ -33,11 +32,17 @@ public class User {
     private LocalDateTime resetPasswordExpire;
     private LocalDateTime createdAt;
 
-    public User(String name, String email, List<Role> roles, String password) {
-        this.name = name;
-        this.email = email;
-        this.roles = roles;
-        this.password = password;
+//    public User(String name, String email, List<Role> roles, String password) {
+//        this.name = name;
+//        this.email = email;
+//        this.roles = roles;
+//        this.password = password;
+//        this.resetPasswordToken = null;
+//        this.resetPasswordExpire = null;
+//        this.createdAt = LocalDateTime.now();
+//    }
+
+    public User() {
         this.resetPasswordToken = null;
         this.resetPasswordExpire = null;
         this.createdAt = LocalDateTime.now();
