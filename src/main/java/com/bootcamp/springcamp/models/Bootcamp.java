@@ -5,12 +5,16 @@ import jakarta.validation.constraints.*;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.ReadOnlyProperty;
+import org.springframework.data.mongodb.core.index.GeoSpatialIndexType;
+import org.springframework.data.mongodb.core.index.GeoSpatialIndexed;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Getter
 @Setter
@@ -44,15 +48,16 @@ public class Bootcamp {
     private Address address;
 
     @NotNull
+    @GeoSpatialIndexed(name = "location_index", type = GeoSpatialIndexType.GEO_2DSPHERE)
     private Location location;
 
     @NotNull
     @Size(min = 1, message = "add atleast one career option")
     private List<Career> careers;
 
-    private List<Double> ratings;
+    private Map<String, Double> ratings;
 
-    private List<Double> costs;
+    private Map<String, Double> costs;
 
     private String photo;
 
@@ -70,8 +75,8 @@ public class Bootcamp {
     public List<Course> courses;
 
     public Bootcamp() {
-        this.ratings = List.of();
-        this.costs = List.of();
+        this.ratings = new HashMap<>();
+        this.costs = new HashMap<>();
         this.housing = false;
         this.jobAssistance = false;
         this.jobGuarantee = false;
