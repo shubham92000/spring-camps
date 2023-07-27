@@ -53,6 +53,10 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public String register(RegisterReqDto registerDto) {
+        if(registerDto.getPassword().length() < 6){
+            throw new CampApiException(HttpStatus.BAD_REQUEST, "invalid password");
+        }
+
         if(userRepo.existsByEmail(registerDto.getEmail())){
             throw new CampApiException(HttpStatus.BAD_REQUEST, "email already exists");
         }

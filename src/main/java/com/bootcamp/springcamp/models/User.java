@@ -3,6 +3,7 @@ package com.bootcamp.springcamp.models;
 import com.bootcamp.springcamp.utils.Role;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -27,6 +28,8 @@ public class User {
 
     @Min(value = 1, message = "atleast one role must be provided")
     private List<Role> roles;
+
+    @Size(min = 6, message = "password length is too short")
     private String password;
     private String resetPasswordToken;
     private LocalDateTime resetPasswordExpire;

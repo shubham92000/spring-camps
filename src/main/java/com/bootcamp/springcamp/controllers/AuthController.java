@@ -5,6 +5,7 @@ import com.bootcamp.springcamp.dtos.LoginResDto;
 import com.bootcamp.springcamp.dtos.RegisterReqDto;
 import com.bootcamp.springcamp.dtos.RegisterResDto;
 import com.bootcamp.springcamp.services.AuthService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,7 +29,7 @@ public class AuthController {
     }
 
     @PostMapping(value = {"/register", "/signup"})
-    public ResponseEntity<RegisterResDto> register(@RequestBody RegisterReqDto registerDto){
+    public ResponseEntity<RegisterResDto> register(@Valid @RequestBody RegisterReqDto registerDto){
         String token = authService.register(registerDto);
         RegisterResDto response = new RegisterResDto(token);
         return ResponseEntity.ok(response);
