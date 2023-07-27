@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
 @ToString
 @Document(collection = "courses")
@@ -44,15 +43,8 @@ public class Course {
     @DocumentReference
     private User user;
 
-    public Course(String title, String description, String weeks, Double tuition, Skill minimumSkill, Bootcamp bootcamp, User user) {
-        this.title = title;
-        this.description = description;
-        this.weeks = weeks;
-        this.tuition = tuition;
-        this.minimumSkill = minimumSkill;
+    public Course() {
         this.scholarshipAvailable = false;
         this.createdAt = LocalDateTime.now();
-        this.bootcamp = bootcamp;
-        this.user = user;
     }
 }

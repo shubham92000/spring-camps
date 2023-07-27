@@ -14,7 +14,6 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
 @ToString
 @Document(collection = "reviews")
@@ -46,12 +45,7 @@ public class Review {
     @DocumentReference
     public User user;
 
-    public Review(String title, String text, Double rating, LocalDateTime createdAt, Bootcamp bootcamp, User user) {
-        this.title = title;
-        this.text = text;
-        this.rating = rating;
-        this.createdAt = createdAt;
-        this.bootcamp = bootcamp;
-        this.user = user;
+    public Review() {
+
     }
 }
