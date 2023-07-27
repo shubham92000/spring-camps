@@ -9,23 +9,43 @@ import com.bootcamp.springcamp.security.JwtTokenProvider;
 import com.bootcamp.springcamp.services.AuthService;
 import com.bootcamp.springcamp.utils.Role;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class AuthServiceImpl implements AuthService {
+    private AuthenticationManager authenticationManager;
     private UserRepo userRepo;
     private JwtTokenProvider jwtTokenProvider;
+    private UserDetailsService userDetailsService;
 
-    public AuthServiceImpl(UserRepo userRepo, JwtTokenProvider jwtTokenProvider) {
+    public AuthServiceImpl(AuthenticationManager authenticationManager, UserRepo userRepo, JwtTokenProvider jwtTokenProvider, UserDetailsService userDetailsService) {
+        this.authenticationManager = authenticationManager;
         this.userRepo = userRepo;
         this.jwtTokenProvider = jwtTokenProvider;
+        this.userDetailsService = userDetailsService;
     }
 
     @Override
     public String login(LoginReqDto loginDto) {
-        return null;
+        UsernamePasswordAuthenticationToken authenticationToken
+                = new UsernamePasswordAuthenticationToken(
+                loginDto.getEmail(),
+                loginDto.getPassword()
+        );
+        Authentication authentication = authenticationManager.authenticate(authenticationToken);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        String token = jwtTokenProvider.generateToken(authentication);
+        return token;
     }
 
     @Override
@@ -48,8 +68,18 @@ public class AuthServiceImpl implements AuthService {
         user.setRoles(List.of(role));
 
         user = userRepo.save(user);
-        System.out.println(user);
 
-        return "token";
+        UserDetails userDetails = userDetailsService.loadUserByUsername(registerDto.getEmail());
+
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
+                userDetails,
+                null,
+                userDetails.getAuthorities()
+        );
+
+        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+
+        String token = jwtTokenProvider.generateToken(authenticationToken);
+        return token;
     }
 }
