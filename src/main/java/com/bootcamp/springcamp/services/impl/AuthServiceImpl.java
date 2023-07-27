@@ -8,6 +8,7 @@ import com.bootcamp.springcamp.repos.UserRepo;
 import com.bootcamp.springcamp.security.JwtTokenProvider;
 import com.bootcamp.springcamp.services.AuthService;
 import com.bootcamp.springcamp.utils.Role;
+import com.bootcamp.springcamp.utils.RoleValue;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -56,11 +57,9 @@ public class AuthServiceImpl implements AuthService {
             throw new CampApiException(HttpStatus.BAD_REQUEST, "email already exists");
         }
 
-        Role role = null;
-        try {
-            role = Role.valueOf(registerDto.getUserType());
-        } catch (IllegalArgumentException ex) {
-            throw new RuntimeException("user type not found");
+        Role role = RoleValue.getRole(registerDto.getUserType());
+        if(role == null) {
+            throw new CampApiException(HttpStatus.BAD_REQUEST, "invalid userType");
         }
 
         User user = new User();

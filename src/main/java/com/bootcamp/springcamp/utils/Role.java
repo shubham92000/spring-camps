@@ -1,7 +1,7 @@
 package com.bootcamp.springcamp.utils;
 
 public enum Role {
-    user,
-    publisher,
-    admin
+    ROLE_USER,
+    ROLE_PUBLISHER,
+    ROLE_ADMIN
 }
