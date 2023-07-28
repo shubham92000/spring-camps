@@ -64,7 +64,7 @@ public class AuthServiceImpl implements AuthService {
         }
 
         Role role = RoleValue.getRole(registerDto.getUserType());
-        if(role == null) {
+        if(role == null || role == Role.ROLE_ADMIN) {
             throw new CampApiException(HttpStatus.BAD_REQUEST, "invalid userType");
         }
 
