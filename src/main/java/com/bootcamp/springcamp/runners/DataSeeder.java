@@ -7,7 +7,9 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.Calendar;
 import java.util.List;
+import java.util.TimeZone;
 
 @Component
 public class DataSeeder implements CommandLineRunner {
@@ -31,5 +33,8 @@ public class DataSeeder implements CommandLineRunner {
 //        User u1 = userRepo.findByEmail("DEF@gmail.com").orElseThrow(() -> new RuntimeException("not found"));
 //        System.out.println(u1);
 //        System.out.println(LocalDateTime.now());
+
+//        Calendar calendar = Calendar.getInstance();
+//        System.out.println("-------------> "+calendar.getTimeZone());
     }
 }
