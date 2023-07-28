@@ -1,4 +1,4 @@
-package com.bootcamp.springcamp.dtos;
+package com.bootcamp.springcamp.dtos.register;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;

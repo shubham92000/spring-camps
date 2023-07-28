@@ -1,9 +1,9 @@
 package com.bootcamp.springcamp.controllers;
 
-import com.bootcamp.springcamp.dtos.LoginReqDto;
-import com.bootcamp.springcamp.dtos.LoginResDto;
-import com.bootcamp.springcamp.dtos.RegisterReqDto;
-import com.bootcamp.springcamp.dtos.RegisterResDto;
+import com.bootcamp.springcamp.dtos.login.LoginReqDto;
+import com.bootcamp.springcamp.dtos.login.LoginResDto;
+import com.bootcamp.springcamp.dtos.register.RegisterReqDto;
+import com.bootcamp.springcamp.dtos.register.RegisterResDto;
 import com.bootcamp.springcamp.services.AuthService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -23,15 +23,13 @@ public class AuthController {
 
     @PostMapping(value = {"/login", "/signin"})
     public ResponseEntity<LoginResDto> login(@RequestBody LoginReqDto loginDto){
-        String token = authService.login(loginDto);
-        LoginResDto response = new LoginResDto(token);
+        LoginResDto response = authService.login(loginDto);
         return ResponseEntity.ok(response);
     }
 
     @PostMapping(value = {"/register", "/signup"})
     public ResponseEntity<RegisterResDto> register(@Valid @RequestBody RegisterReqDto registerDto){
-        String token = authService.register(registerDto);
-        RegisterResDto response = new RegisterResDto(token);
+        RegisterResDto response = authService.register(registerDto);
         return ResponseEntity.ok(response);
     }
 }

@@ -1,4 +1,4 @@
-package com.bootcamp.springcamp.dtos;
+package com.bootcamp.springcamp.dtos.login;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,6 +9,6 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class RegisterResDto {
+public class LoginResDto {
     private String token;
 }

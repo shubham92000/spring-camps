@@ -1,4 +1,4 @@
-package com.bootcamp.springcamp.dtos;
+package com.bootcamp.springcamp.dtos.login;
 
 import lombok.*;
 

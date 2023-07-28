@@ -1,7 +1,9 @@
 package com.bootcamp.springcamp.services.impl;
 
-import com.bootcamp.springcamp.dtos.LoginReqDto;
-import com.bootcamp.springcamp.dtos.RegisterReqDto;
+import com.bootcamp.springcamp.dtos.login.LoginReqDto;
+import com.bootcamp.springcamp.dtos.login.LoginResDto;
+import com.bootcamp.springcamp.dtos.register.RegisterReqDto;
+import com.bootcamp.springcamp.dtos.register.RegisterResDto;
 import com.bootcamp.springcamp.exception.CampApiException;
 import com.bootcamp.springcamp.models.User;
 import com.bootcamp.springcamp.repos.UserRepo;
@@ -38,7 +40,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public String login(LoginReqDto loginDto) {
+    public LoginResDto login(LoginReqDto loginDto) {
         UsernamePasswordAuthenticationToken authenticationToken
                 = new UsernamePasswordAuthenticationToken(
                 loginDto.getEmail(),
@@ -48,11 +50,11 @@ public class AuthServiceImpl implements AuthService {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         String token = jwtTokenProvider.generateToken(authentication);
-        return token;
+        return new LoginResDto(token);
     }
 
     @Override
-    public String register(RegisterReqDto registerDto) {
+    public RegisterResDto register(RegisterReqDto registerDto) {
         if(registerDto.getPassword().length() < 6){
             throw new CampApiException(HttpStatus.BAD_REQUEST, "invalid password");
         }
@@ -85,6 +87,6 @@ public class AuthServiceImpl implements AuthService {
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 
         String token = jwtTokenProvider.generateToken(authenticationToken);
-        return token;
+        return new RegisterResDto(token);
     }
 }

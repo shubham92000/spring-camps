@@ -1,9 +1,11 @@
 package com.bootcamp.springcamp.services;
 
-import com.bootcamp.springcamp.dtos.LoginReqDto;
-import com.bootcamp.springcamp.dtos.RegisterReqDto;
+import com.bootcamp.springcamp.dtos.login.LoginReqDto;
+import com.bootcamp.springcamp.dtos.login.LoginResDto;
+import com.bootcamp.springcamp.dtos.register.RegisterReqDto;
+import com.bootcamp.springcamp.dtos.register.RegisterResDto;
 
 public interface AuthService {
-    String login(LoginReqDto loginDto);
-    String register(RegisterReqDto registerDto);
+    LoginResDto login(LoginReqDto loginDto);
+    RegisterResDto register(RegisterReqDto registerDto);
 }
