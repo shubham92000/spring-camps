@@ -5,6 +5,8 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.CompoundIndex;
+import org.springframework.data.mongodb.core.index.CompoundIndexes;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
@@ -15,6 +17,12 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @ToString
 @Document(collection = "courses")
+@CompoundIndexes({
+        @CompoundIndex(
+                name = "title_bootcamp",
+                def = "{'bootcamp' : 1, 'title': 1}"
+        )
+})
 public class Course {
     @Id
     private String id;
