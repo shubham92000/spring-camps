@@ -20,9 +20,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/bootcamps")
 public class BootcampController {
-//    @PreAuthorize("hasRole('USER')")
-//    @GetMapping("/test")
-//    public String test(Authentication authentication){
+//    @Secured({ "ROLE_PUBLISHER" })
+//    @DeleteMapping("/test")
+//    public String test(){
 //        return "ok";
 //    }
 
@@ -32,7 +32,7 @@ public class BootcampController {
     public BootcampController(BootcampService bootcampService) {
         this.bootcampService = bootcampService;
     }
-
+    
     @GetMapping
     public ResponseEntity<List<BootcampResDto>> getAllBootcamps(){
         var response = bootcampService.getAllBootcamps();
@@ -47,7 +47,7 @@ public class BootcampController {
         return ResponseEntity.ok(response);
     }
 
-    @PreAuthorize("hasRole('PUBLISHER')")
+    @Secured({ "ROLE_PUBLISHER", "ROLE_ADMIN" })
     @PostMapping
     public ResponseEntity<BootcampResDto> createBootcamp(@Valid @RequestBody CreateBootcampReqDto createBootcampReqDto, Authentication authentication){
         var response = bootcampService.createBootcamp(createBootcampReqDto, authentication);
@@ -55,7 +55,7 @@ public class BootcampController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @PreAuthorize("hasRole('PUBLISHER')")
+    @Secured({ "ROLE_PUBLISHER", "ROLE_ADMIN" })
     @PutMapping("/{id}")
     public ResponseEntity<BootcampResDto> updateBootcamp(@PathVariable(name = "id") String id, UpdateBootcampReqDto updateBootcampReqDto){
         var response = bootcampService.updateBootcamp(updateBootcampReqDto);
