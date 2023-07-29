@@ -1,6 +1,5 @@
 package com.bootcamp.springcamp.dtos.bootcamp;
 
-import com.bootcamp.springcamp.utils.Career;
 import lombok.*;
 
 import java.util.List;
@@ -21,7 +20,7 @@ public class BootcampResDto {
     private String phone;
     private String email;
     private String formattedAddress;
-    private List<Career> careers;
+    private List<String> careers;
     private Map<String, Double> ratings;
     private Map<String, Double> costs;
     private String photo;

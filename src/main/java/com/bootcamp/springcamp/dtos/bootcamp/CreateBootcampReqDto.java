@@ -1,19 +1,8 @@
 package com.bootcamp.springcamp.dtos.bootcamp;
 
-import com.bootcamp.springcamp.models.Address;
-import com.bootcamp.springcamp.models.Location;
-import com.bootcamp.springcamp.utils.Career;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.GeoSpatialIndexType;
-import org.springframework.data.mongodb.core.index.GeoSpatialIndexed;
-import org.springframework.data.mongodb.core.index.Indexed;
-
-import java.util.List;
-import java.util.Map;
 
 @Getter
 @Setter

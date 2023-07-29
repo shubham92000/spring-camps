@@ -1,6 +1,5 @@
 package com.bootcamp.springcamp.models;
 
-import com.bootcamp.springcamp.utils.Career;
 import jakarta.validation.constraints.*;
 import lombok.*;
 import org.springframework.data.annotation.Id;
@@ -53,7 +52,7 @@ public class Bootcamp {
 
     @NotNull
     @Size(min = 1, message = "add atleast one career option")
-    private List<Career> careers;
+    private List<String> careers;
 
     private Map<String, Double> ratings;
 

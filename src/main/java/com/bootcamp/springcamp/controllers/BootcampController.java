@@ -32,7 +32,7 @@ public class BootcampController {
     public BootcampController(BootcampService bootcampService) {
         this.bootcampService = bootcampService;
     }
-    
+
     @GetMapping
     public ResponseEntity<List<BootcampResDto>> getAllBootcamps(){
         var response = bootcampService.getAllBootcamps();
