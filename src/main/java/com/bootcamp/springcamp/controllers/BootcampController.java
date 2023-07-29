@@ -36,12 +36,14 @@ public class BootcampController {
     @GetMapping
     public ResponseEntity<List<BootcampResDto>> getAllBootcamps(){
         var response = bootcampService.getAllBootcamps();
+        log.info("getAllBootcamps res: "+response);
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<BootcampResDto> getBootcamp(@PathVariable(name = "id") String id){
         var response = bootcampService.getBootcamp(id);
+        log.info("getBootcamp res: "+response);
         return ResponseEntity.ok(response);
     }
 
@@ -49,6 +51,7 @@ public class BootcampController {
     @PostMapping
     public ResponseEntity<BootcampResDto> createBootcamp(@Valid @RequestBody CreateBootcampReqDto createBootcampReqDto, Authentication authentication){
         var response = bootcampService.createBootcamp(createBootcampReqDto, authentication);
+        log.info("createBootcamp res: "+response);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
@@ -56,6 +59,7 @@ public class BootcampController {
     @PutMapping("/{id}")
     public ResponseEntity<BootcampResDto> updateBootcamp(@PathVariable(name = "id") String id, UpdateBootcampReqDto updateBootcampReqDto){
         var response = bootcampService.updateBootcamp(updateBootcampReqDto);
+        log.info("updateBootcamp res: "+response);
         return ResponseEntity.ok(response);
     }
 
@@ -63,6 +67,7 @@ public class BootcampController {
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteBootcamp(@PathVariable(name = "id") String id){
         var response = bootcampService.deleteBootcamp(id);
+        log.info("deleteBootcamp res: "+response);
         return ResponseEntity.ok(response);
     }
 }

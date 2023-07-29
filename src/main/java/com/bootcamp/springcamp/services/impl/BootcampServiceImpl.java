@@ -10,6 +10,7 @@ import com.bootcamp.springcamp.models.User;
 import com.bootcamp.springcamp.repos.BootcampRepo;
 import com.bootcamp.springcamp.repos.UserRepo;
 import com.bootcamp.springcamp.services.BootcampService;
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -23,10 +24,12 @@ import java.util.stream.Collectors;
 public class BootcampServiceImpl implements BootcampService {
 
     private final Logger log = LoggerFactory.getLogger(BootcampController.class);
+    private ModelMapper mapper;
     private BootcampRepo bootcampRepo;
     private UserRepo userRepo;
 
-    public BootcampServiceImpl(BootcampRepo bootcampRepo, UserRepo userRepo) {
+    public BootcampServiceImpl(ModelMapper mapper, BootcampRepo bootcampRepo, UserRepo userRepo) {
+        this.mapper = mapper;
         this.bootcampRepo = bootcampRepo;
         this.userRepo = userRepo;
     }
@@ -34,26 +37,7 @@ public class BootcampServiceImpl implements BootcampService {
     @Override
     public List<BootcampResDto> getAllBootcamps() {
         var bootcamps = bootcampRepo.findAll()
-                .stream().map(bootcamp ->
-                        BootcampResDto.builder()
-                                .id(bootcamp.getId())
-                                .name(bootcamp.getName())
-                                .slug(null)
-                                .description(bootcamp.getDescription())
-                                .website(bootcamp.getWebsite())
-                                .phone(bootcamp.getPhone())
-                                .email(bootcamp.getEmail())
-                                .formattedAddress(null)
-                                .careers(bootcamp.getCareers())
-                                .ratings(bootcamp.getRatings())
-                                .costs(bootcamp.getCosts())
-                                .photo(null)
-                                .housing(bootcamp.getHousing())
-                                .jobAssistance(bootcamp.getJobAssistance())
-                                .jobGuarantee(bootcamp.getJobGuarantee())
-                                .acceptGI(bootcamp.getAcceptGI())
-                                .build()
-                    )
+                .stream().map(bootcamp -> mapper.map(bootcamp, BootcampResDto.class))
                 .collect(Collectors.toList());
         return bootcamps;
     }
@@ -63,25 +47,7 @@ public class BootcampServiceImpl implements BootcampService {
         var bootcamp = bootcampRepo.findById(id)
                 .orElseThrow(() -> new CampApiException(HttpStatus.OK, String.format("bootcamp with id %s not found", id)));
 
-        var bootcampRes = BootcampResDto.builder()
-                .id(bootcamp.getId())
-                .name(bootcamp.getName())
-                .slug(null)
-                .description(bootcamp.getDescription())
-                .website(bootcamp.getWebsite())
-                .phone(bootcamp.getPhone())
-                .email(bootcamp.getEmail())
-                .formattedAddress(null)
-                .careers(bootcamp.getCareers())
-                .ratings(bootcamp.getRatings())
-                .costs(bootcamp.getCosts())
-                .photo(null)
-                .housing(bootcamp.getHousing())
-                .jobAssistance(bootcamp.getJobAssistance())
-                .jobGuarantee(bootcamp.getJobGuarantee())
-                .acceptGI(bootcamp.getAcceptGI())
-                .build();
-
+        var bootcampRes = mapper.map(bootcamp, BootcampResDto.class);
         return bootcampRes;
     }
 
@@ -90,35 +56,13 @@ public class BootcampServiceImpl implements BootcampService {
         String email = authentication.getName();
         User user = userRepo.findByEmail(email).orElseThrow(() -> new CampApiException(HttpStatus.UNAUTHORIZED, "user not found"));
 
-        var bootcamp = new Bootcamp();
-        bootcamp.setName(createBootcampReqDto.getName());
-        bootcamp.setDescription(createBootcampReqDto.getDescription());
-        bootcamp.setWebsite(createBootcampReqDto.getWebsite());
-        bootcamp.setPhone(createBootcampReqDto.getPhone());
-        bootcamp.setEmail(createBootcampReqDto.getEmail());
+        var bootcamp = mapper.map(createBootcampReqDto, Bootcamp.class);
         bootcamp.setUser(user);
 
         bootcamp = bootcampRepo.save(bootcamp);
+        log.info("saved bootcamp -> " + bootcamp);
 
-        var bootcampRes = BootcampResDto.builder()
-                .id(bootcamp.getId())
-                .name(bootcamp.getName())
-                .slug(null)
-                .description(bootcamp.getDescription())
-                .website(bootcamp.getWebsite())
-                .phone(bootcamp.getPhone())
-                .email(bootcamp.getEmail())
-                .formattedAddress(null)
-                .careers(bootcamp.getCareers())
-                .ratings(bootcamp.getRatings())
-                .costs(bootcamp.getCosts())
-                .photo(null)
-                .housing(bootcamp.getHousing())
-                .jobAssistance(bootcamp.getJobAssistance())
-                .jobGuarantee(bootcamp.getJobGuarantee())
-                .acceptGI(bootcamp.getAcceptGI())
-                .build();
-
+        var bootcampRes = mapper.map(bootcamp, BootcampResDto.class);
         return bootcampRes;
     }
 
