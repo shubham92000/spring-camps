@@ -85,7 +85,7 @@ public class BootcampServiceImpl implements BootcampService {
         }
 
         if(updateBootcampReqDto.getName() != null){
-            if(bootcampRepo.findByName(updateBootcampReqDto.getName()).isEmpty()){
+            if(bootcampRepo.findByName(updateBootcampReqDto.getName()).isPresent()){
                 throw new CampApiException(HttpStatus.NOT_ACCEPTABLE, "bootcamp with the name already exists");
             }
             bootcamp.setName(updateBootcampReqDto.getName());

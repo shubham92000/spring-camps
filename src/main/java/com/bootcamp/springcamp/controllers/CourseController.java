@@ -42,8 +42,8 @@ public class CourseController {
 
     @Secured({ "ROLE_PUBLISHER", "ROLE_ADMIN" })
     @PutMapping("/{id}")
-    public ResponseEntity<CourseResDto> updateCourse(@PathVariable(name = "id") String courseId, @Valid @RequestBody UpdateCourseReqDto courseInfo){
-        var res = courseService.updateCourse(courseId, courseInfo);
+    public ResponseEntity<CourseResDto> updateCourse(@PathVariable(name = "id") String courseId, @Valid @RequestBody UpdateCourseReqDto courseInfo, Authentication authentication){
+        var res = courseService.updateCourse(courseId, courseInfo, authentication);
         return ResponseEntity.ok(res);
     }
 

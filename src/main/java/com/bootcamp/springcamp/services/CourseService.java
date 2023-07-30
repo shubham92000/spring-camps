@@ -11,6 +11,6 @@ public interface CourseService {
     List<CourseResDto> getAllCoursesOfBootcamp(String bootcampId);
     CourseResDto getCourse(String courseId);
     CourseResDto createCourse(CreateCourseReqDto createCourseReqDto, Authentication authentication);
-    CourseResDto updateCourse(String courseId, UpdateCourseReqDto courseInfo);
+    CourseResDto updateCourse(String courseId, UpdateCourseReqDto courseInfo, Authentication authentication);
     String deleteCourse(String courseId);
 }

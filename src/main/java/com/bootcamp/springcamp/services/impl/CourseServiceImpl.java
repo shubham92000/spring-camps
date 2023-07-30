@@ -88,8 +88,48 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public CourseResDto updateCourse(String courseId, UpdateCourseReqDto courseInfo) {
-        return null;
+    public CourseResDto updateCourse(String courseId, UpdateCourseReqDto courseInfo, Authentication authentication) {
+        var course = courseRepo.findById(courseId)
+                .orElseThrow(() -> new CampApiException(HttpStatus.NOT_FOUND, String.format("course with id %s not found", courseId)));
+
+        var courseCreator = course.getUser();
+        var userInRequest = userRepo.findByEmail(authentication.getName())
+                .orElseThrow(() -> new CampApiException(HttpStatus.NOT_FOUND, String.format("user with email %s not found", authentication.getName())));
+
+        if(!courseCreator.getEmail().equals(userInRequest.getEmail())){
+            throw new CampApiException(HttpStatus.UNAUTHORIZED, String.format("user is not allowed to update course with %s", courseId));
+        }
+
+        if(courseInfo.getTitle() != null){
+            var courseWithSameNameInBootcamp = courseRepo.findByTitleAndBootcamp(courseInfo.getTitle(), course.getBootcamp()).isPresent();
+            if(courseWithSameNameInBootcamp){
+                throw new CampApiException(HttpStatus.NOT_ACCEPTABLE, "course with the title already exists");
+            }
+            course.setTitle(courseInfo.getTitle());
+        }
+
+        if(courseInfo.getDescription() != null){
+            course.setDescription(courseInfo.getDescription());
+        }
+
+        if(courseInfo.getWeeks() != null){
+            course.setWeeks(courseInfo.getWeeks());
+        }
+
+        if(courseInfo.getTuition() != null){
+            course.setTuition(courseInfo.getTuition());
+        }
+
+        if(courseInfo.getMinimumSkill() != null){
+            course.setMinimumSkill(courseInfo.getMinimumSkill());
+        }
+
+        if(courseInfo.getScholarshipAvailable() != null){
+            course.setScholarshipAvailable(courseInfo.getScholarshipAvailable());
+        }
+
+        course = courseRepo.save(course);
+        return mapper.map(course, CourseResDto.class);
     }
 
     @Override
