@@ -11,6 +11,6 @@ public interface BootcampService {
     public List<BootcampResDto> getAllBootcamps();
     public BootcampResDto getBootcamp(String id);
     public BootcampResDto createBootcamp(CreateBootcampReqDto createBootcampReqDto, Authentication authentication);
-    public BootcampResDto updateBootcamp(UpdateBootcampReqDto updateBootcampReqDto);
+    public BootcampResDto updateBootcamp(String id, UpdateBootcampReqDto updateBootcampReqDto, Authentication authentication);
     public String deleteBootcamp(String id);
 }

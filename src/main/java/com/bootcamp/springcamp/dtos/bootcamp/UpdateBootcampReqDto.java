@@ -1,5 +1,26 @@
 package com.bootcamp.springcamp.dtos.bootcamp;
 
-public class UpdateBootcampReqDto {
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
+import lombok.*;
 
+import java.util.List;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
+public class UpdateBootcampReqDto {
+    private String name;
+    private String description;
+    private String website;
+    private String phone;
+    private String email;
+    private AddressReqDto address;
+    private List<String> careers;
+    private Boolean housing;
+    private Boolean jobAssistance;
+    private Boolean jobGuarantee;
+    private Boolean acceptGI;
 }

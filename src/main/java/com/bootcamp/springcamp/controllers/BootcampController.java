@@ -57,8 +57,8 @@ public class BootcampController {
 
     @Secured({ "ROLE_PUBLISHER", "ROLE_ADMIN" })
     @PutMapping("/{id}")
-    public ResponseEntity<BootcampResDto> updateBootcamp(@PathVariable(name = "id") String id, UpdateBootcampReqDto updateBootcampReqDto){
-        var response = bootcampService.updateBootcamp(updateBootcampReqDto);
+    public ResponseEntity<BootcampResDto> updateBootcamp(@PathVariable(name = "id") String id,@Valid @RequestBody UpdateBootcampReqDto updateBootcampReqDto, Authentication authentication){
+        var response = bootcampService.updateBootcamp(id, updateBootcampReqDto, authentication);
         log.info("updateBootcamp res: "+response);
         return ResponseEntity.ok(response);
     }

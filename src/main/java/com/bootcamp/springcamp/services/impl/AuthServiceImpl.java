@@ -1,5 +1,6 @@
 package com.bootcamp.springcamp.services.impl;
 
+import com.bootcamp.springcamp.dtos.auth.UserResDto;
 import com.bootcamp.springcamp.dtos.login.LoginReqDto;
 import com.bootcamp.springcamp.dtos.login.LoginResDto;
 import com.bootcamp.springcamp.dtos.register.RegisterReqDto;
@@ -11,6 +12,9 @@ import com.bootcamp.springcamp.security.JwtTokenProvider;
 import com.bootcamp.springcamp.services.AuthService;
 import com.bootcamp.springcamp.utils.Role;
 import com.bootcamp.springcamp.utils.RoleValue;
+import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -25,13 +29,16 @@ import java.util.List;
 
 @Service
 public class AuthServiceImpl implements AuthService {
+    private final Logger log = LoggerFactory.getLogger(AuthServiceImpl.class);
+    private ModelMapper mapper;
     private AuthenticationManager authenticationManager;
     private UserRepo userRepo;
     private JwtTokenProvider jwtTokenProvider;
     private UserDetailsService userDetailsService;
     private PasswordEncoder passwordEncoder;
 
-    public AuthServiceImpl(AuthenticationManager authenticationManager, UserRepo userRepo, JwtTokenProvider jwtTokenProvider, UserDetailsService userDetailsService, PasswordEncoder passwordEncoder) {
+    public AuthServiceImpl(ModelMapper mapper, AuthenticationManager authenticationManager, UserRepo userRepo, JwtTokenProvider jwtTokenProvider, UserDetailsService userDetailsService, PasswordEncoder passwordEncoder) {
+        this.mapper = mapper;
         this.authenticationManager = authenticationManager;
         this.userRepo = userRepo;
         this.jwtTokenProvider = jwtTokenProvider;
@@ -88,5 +95,13 @@ public class AuthServiceImpl implements AuthService {
 
         String token = jwtTokenProvider.generateToken(authenticationToken);
         return new RegisterResDto(token);
+    }
+
+    @Override
+    public UserResDto getUser(Authentication authentication) {
+        String email = authentication.getName();
+        var user = userRepo.findByEmail(email)
+                .orElseThrow(() -> new CampApiException(HttpStatus.NOT_FOUND, String.format("user with email %s not found", email)));
+        return mapper.map(user, UserResDto.class);
     }
 }
