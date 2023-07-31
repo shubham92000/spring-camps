@@ -9,7 +9,7 @@ import org.springframework.data.mongodb.config.EnableMongoAuditing;
 import java.util.TimeZone;
 
 @SpringBootApplication
-@EnableMongoAuditing
+@EnableMongoAuditing(modifyOnCreate = false)
 public class SpringCampApplication {
 	@Bean
 	public ModelMapper modelMapper(){

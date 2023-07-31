@@ -21,8 +21,8 @@ import java.time.LocalDateTime;
 @Document(collection = "reviews")
 @CompoundIndexes({
         @CompoundIndex(
-                name = "bootcamp_user",
-                def = "{'bootcamp' : 1, 'user': 1}"
+                name = "bootcamp_course_user",
+                def = "{'bootcamp' : 1, 'course': 1,  'user': 1}"
         )
 })
 public class Review {
@@ -48,6 +48,9 @@ public class Review {
 
     @DocumentReference
     public Bootcamp bootcamp;
+
+    @DocumentReference
+    public Course course;
 
     @DocumentReference
     public User user;
