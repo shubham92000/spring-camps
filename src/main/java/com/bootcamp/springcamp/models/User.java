@@ -5,7 +5,9 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -33,21 +35,15 @@ public class User {
     private String password;
     private String resetPasswordToken;
     private LocalDateTime resetPasswordExpire;
-    private LocalDateTime createdAt;
 
-//    public User(String name, String email, List<Role> roles, String password) {
-//        this.name = name;
-//        this.email = email;
-//        this.roles = roles;
-//        this.password = password;
-//        this.resetPasswordToken = null;
-//        this.resetPasswordExpire = null;
-//        this.createdAt = LocalDateTime.now();
-//    }
+    @CreatedDate
+    private LocalDateTime createdOn;
+
+    @LastModifiedDate
+    private LocalDateTime lastModifiedOn;
 
     public User() {
         this.resetPasswordToken = null;
         this.resetPasswordExpire = null;
-        this.createdAt = LocalDateTime.now();
     }
 }

@@ -2,7 +2,9 @@ package com.bootcamp.springcamp.models;
 
 import jakarta.validation.constraints.*;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.annotation.ReadOnlyProperty;
 import org.springframework.data.mongodb.core.index.GeoSpatialIndexType;
 import org.springframework.data.mongodb.core.index.GeoSpatialIndexed;
@@ -10,6 +12,7 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
@@ -64,7 +67,12 @@ public class Bootcamp {
     private Boolean jobAssistance;
     private Boolean jobGuarantee;
     private Boolean acceptGI;
+
+    @CreatedDate
     private LocalDateTime createdOn;
+
+    @LastModifiedDate
+    private LocalDateTime lastModifiedOn;
 
     @DocumentReference
     private User user;
@@ -80,6 +88,5 @@ public class Bootcamp {
         this.jobAssistance = false;
         this.jobGuarantee = false;
         this.acceptGI = false;
-        this.createdOn = LocalDateTime.now();
     }
 }

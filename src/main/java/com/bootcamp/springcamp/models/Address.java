@@ -2,6 +2,10 @@ package com.bootcamp.springcamp.models;
 
 import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -21,4 +25,8 @@ public class Address {
     private String zipcode;
     @NotEmpty
     private String country;
+    @CreatedDate
+    private LocalDateTime createdOn;
+    @LastModifiedDate
+    private LocalDateTime lastModifiedOn;
 }

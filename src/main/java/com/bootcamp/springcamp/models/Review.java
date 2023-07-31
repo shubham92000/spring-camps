@@ -4,7 +4,9 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.index.CompoundIndexes;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -37,7 +39,12 @@ public class Review {
     @NotNull(message = "Please add a rating between 1 and 10")
     @Size(min = 1, max = 10)
     public Double rating;
-    public LocalDateTime createdAt;
+
+    @CreatedDate
+    private LocalDateTime createdOn;
+
+    @LastModifiedDate
+    private LocalDateTime lastModifiedOn;
 
     @DocumentReference
     public Bootcamp bootcamp;

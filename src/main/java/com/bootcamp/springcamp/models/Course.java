@@ -4,7 +4,9 @@ import com.bootcamp.springcamp.utils.Skill;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.index.CompoundIndexes;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -43,7 +45,11 @@ public class Course {
     private Skill minimumSkill;
 
     private Boolean scholarshipAvailable;
-    private LocalDateTime createdAt;
+    @CreatedDate
+    private LocalDateTime createdOn;
+
+    @LastModifiedDate
+    private LocalDateTime lastModifiedOn;
 
     @DocumentReference
     private Bootcamp bootcamp;
@@ -53,6 +59,5 @@ public class Course {
 
     public Course() {
         this.scholarshipAvailable = false;
-        this.createdAt = LocalDateTime.now();
     }
 }
