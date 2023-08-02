@@ -14,6 +14,7 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -68,6 +69,14 @@ public class BootcampController {
     public ResponseEntity<String> deleteBootcamp(@PathVariable(name = "id") String id){
         var response = bootcampService.deleteBootcamp(id);
         log.info("deleteBootcamp res: "+response);
+        return ResponseEntity.ok(response);
+    }
+
+    @Secured({ "ROLE_PUBLISHER", "ROLE_ADMIN" })
+    @PutMapping("/{id}/uploadfile")
+    public ResponseEntity<String> uploadFile(@PathVariable("id") String bootcampId, @RequestParam MultipartFile file, Authentication authentication){
+        var response = bootcampService.uploadFile(bootcampId, file, authentication);
+        log.info("uploadFile res: "+response);
         return ResponseEntity.ok(response);
     }
 }
