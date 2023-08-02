@@ -8,7 +8,6 @@ import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -73,10 +72,17 @@ public class BootcampController {
     }
 
     @Secured({ "ROLE_PUBLISHER", "ROLE_ADMIN" })
-    @PutMapping("/{id}/uploadfile")
-    public ResponseEntity<String> uploadFile(@PathVariable("id") String bootcampId, @RequestParam MultipartFile file, Authentication authentication){
-        var response = bootcampService.uploadFile(bootcampId, file, authentication);
+    @PutMapping("/{id}/photo")
+    public ResponseEntity<BootcampResDto> uploadPhotoForBootcamp(@PathVariable("id") String bootcampId, @RequestParam MultipartFile file, Authentication authentication){
+        var response = bootcampService.uploadPhotoForBootcamp(bootcampId, file, authentication);
         log.info("uploadFile res: "+response);
+        return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("{id}/photo/{photoId}")
+    public ResponseEntity<BootcampResDto> deletePhotoForBootcamp(@PathVariable("id") String bootcampId,@PathVariable("photoId") String photoId, Authentication authentication) {
+        var response = bootcampService.deletePhotoForBootcamp(bootcampId, photoId, authentication);
+        log.info("deletePhoto res: "+response);
         return ResponseEntity.ok(response);
     }
 }

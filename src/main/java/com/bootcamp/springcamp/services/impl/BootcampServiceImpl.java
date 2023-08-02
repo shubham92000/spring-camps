@@ -7,23 +7,20 @@ import com.bootcamp.springcamp.dtos.bootcamp.UpdateBootcampReqDto;
 import com.bootcamp.springcamp.exception.CampApiException;
 import com.bootcamp.springcamp.models.Address;
 import com.bootcamp.springcamp.models.Bootcamp;
+import com.bootcamp.springcamp.models.Photo;
 import com.bootcamp.springcamp.models.User;
 import com.bootcamp.springcamp.repos.BootcampRepo;
 import com.bootcamp.springcamp.repos.UserRepo;
 import com.bootcamp.springcamp.services.BootcampService;
 import com.bootcamp.springcamp.services.CareerService;
-import io.minio.GetPresignedObjectUrlArgs;
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
-import io.minio.UploadObjectArgs;
-import io.minio.http.Method;
 import org.apache.commons.compress.utils.FileNameUtils;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -31,7 +28,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.InputStream;
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Service
@@ -169,7 +165,7 @@ public class BootcampServiceImpl implements BootcampService {
     }
 
     @Override
-    public String uploadFile(String bootcampId, MultipartFile file, Authentication authentication) {
+    public BootcampResDto uploadPhotoForBootcamp(String bootcampId, MultipartFile file, Authentication authentication) {
         var bootcamp = bootcampRepo.findById(bootcampId)
                 .orElseThrow(() -> new CampApiException(HttpStatus.NOT_FOUND, String.format("bootcamp with id %s not fonud", bootcampId)));
 
@@ -190,7 +186,7 @@ public class BootcampServiceImpl implements BootcampService {
 
         try{
             InputStream in = file.getResource().getInputStream();
-            minioClient.putObject(
+            var writeResponse = minioClient.putObject(
                     PutObjectArgs.builder()
                             .bucket(imageUploadBucket)
                             .object(filename)
@@ -198,16 +194,18 @@ public class BootcampServiceImpl implements BootcampService {
                             .contentType(file.getContentType())
                             .build()
             );
+            bootcamp.getPhotos().add(
+                    new Photo(uuid, writeResponse.etag(),imageUploadBucket+"/"+filename)
+            );
         }
         catch (Exception ex){
             log.error(ex.getMessage());
-            return "image could not be upload";
+            throw new CampApiException(HttpStatus.INTERNAL_SERVER_ERROR,"image could not be upload");
         }
 
-        bootcamp.setPhoto(imageUploadBucket+"/"+filename);
         bootcamp = bootcampRepo.save(bootcamp);
 
-        return "image url: "+bootcamp.getPhoto();
+        return mapper.map(bootcamp, BootcampResDto.class);
     }
 
     private void validateContentType(MultipartFile file) {
@@ -215,5 +213,24 @@ public class BootcampServiceImpl implements BootcampService {
         if(!validContentType.contains(file.getContentType())){
             throw new CampApiException(HttpStatus.UNSUPPORTED_MEDIA_TYPE, "please upload jpeg or png image file");
         }
+    }
+
+
+    @Override
+    public BootcampResDto deletePhotoForBootcamp(String bootcampId, String photoId, Authentication authentication) {
+        var bootcamp = bootcampRepo.findById(bootcampId)
+                .orElseThrow(() -> new CampApiException(HttpStatus.NOT_FOUND, String.format("bootcamp with id %s not fonud", bootcampId)));
+
+        var bootcampCreationUser = bootcamp.getUser();
+        var userInRequest = userRepo.findByEmail(authentication.getName())
+                .orElseThrow(() -> new CampApiException(HttpStatus.NOT_FOUND ,String.format("user with email %s not found", authentication.getName())));
+
+        if(!bootcampCreationUser.getEmail().equals(userInRequest.getEmail())){
+            throw new CampApiException(HttpStatus.UNAUTHORIZED, String.format("user is not allowed to update bootcamp with %s", bootcampId));
+        }
+
+        bootcamp.getPhotos().removeIf((photo) -> photo.getId().equals(photoId));
+        bootcampRepo.save(bootcamp);
+        return mapper.map(bootcamp, BootcampResDto.class);
     }
 }

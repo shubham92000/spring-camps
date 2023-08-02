@@ -23,7 +23,7 @@ public class BootcampResDto {
     private List<String> careers;
     private Map<String, Double> ratings;
     private Map<String, Double> costs;
-    private String photo;
+    private List<Photo> photos;
     private Boolean housing;
     private Boolean jobAssistance;
     private Boolean jobGuarantee;

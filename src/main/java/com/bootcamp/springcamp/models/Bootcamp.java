@@ -12,8 +12,8 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -61,7 +61,7 @@ public class Bootcamp {
 
     private Map<String, Double> costs;
 
-    private String photo;
+    private List<Photo> photos;
 
     private Boolean housing;
     private Boolean jobAssistance;
@@ -82,6 +82,7 @@ public class Bootcamp {
     public List<Course> courses;
 
     public Bootcamp() {
+        this.photos = new ArrayList<>();
         this.ratings = new HashMap<>();
         this.costs = new HashMap<>();
         this.housing = false;

@@ -14,5 +14,7 @@ public interface BootcampService {
     public BootcampResDto createBootcamp(CreateBootcampReqDto createBootcampReqDto, Authentication authentication);
     public BootcampResDto updateBootcamp(String id, UpdateBootcampReqDto updateBootcampReqDto, Authentication authentication);
     public String deleteBootcamp(String id);
-    public String uploadFile(String bootcampId, MultipartFile file, Authentication authentication);
+    public BootcampResDto uploadPhotoForBootcamp(String bootcampId, MultipartFile file, Authentication authentication);
+
+    public BootcampResDto deletePhotoForBootcamp(String bootcampId, String photoId, Authentication authentication);
 }
