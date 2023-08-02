@@ -42,9 +42,13 @@ public class Bootcamp {
     private String website;
 
     @Size(max = 20, message = "Phone no cannot be longer than 20 characters")
-    private String phone;
+    private String primaryPhone;
 
-    private String email;
+    private String primaryEmail;
+
+    private List<String> emails;
+
+    private List<String> phones;
 
     @NotNull
     private Address address;
@@ -82,6 +86,8 @@ public class Bootcamp {
     public List<Course> courses;
 
     public Bootcamp() {
+        this.emails = new ArrayList<>();
+        this.phones = new ArrayList<>();
         this.photos = new ArrayList<>();
         this.ratings = new HashMap<>();
         this.costs = new HashMap<>();

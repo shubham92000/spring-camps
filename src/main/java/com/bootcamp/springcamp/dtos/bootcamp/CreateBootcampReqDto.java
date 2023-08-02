@@ -1,6 +1,7 @@
 package com.bootcamp.springcamp.dtos.bootcamp;
 
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
@@ -19,6 +20,10 @@ public class CreateBootcampReqDto {
     private String description;
 
     private String website;
-    private String phone;
-    private String email;
+
+    @NotNull
+    private String primaryPhone;
+
+    @NotNull
+    private String primaryEmail;
 }

@@ -17,8 +17,10 @@ public class BootcampResDto {
     private String slug;
     private String description;
     private String website;
-    private String phone;
-    private String email;
+    private String primaryPhone;
+    private String primaryEmail;
+    private List<String> emails;
+    private List<String> phones;
     private String formattedAddress;
     private List<String> careers;
     private Map<String, Double> ratings;

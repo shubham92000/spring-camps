@@ -75,6 +75,8 @@ public class BootcampServiceImpl implements BootcampService {
 
         var bootcamp = mapper.map(createBootcampReqDto, Bootcamp.class);
         bootcamp.setUser(user);
+        bootcamp.getEmails().add(createBootcampReqDto.getPrimaryEmail());
+        bootcamp.getPhones().add(createBootcampReqDto.getPrimaryPhone());
 
         bootcamp = bootcampRepo.save(bootcamp);
         log.info("saved bootcamp -> " + bootcamp);
@@ -109,14 +111,6 @@ public class BootcampServiceImpl implements BootcampService {
 
         if(updateBootcampReqDto.getWebsite() != null){
             bootcamp.setWebsite(updateBootcampReqDto.getWebsite());
-        }
-
-        if(updateBootcampReqDto.getPhone() != null){
-            bootcamp.setPhone(updateBootcampReqDto.getPhone());
-        }
-
-        if(updateBootcampReqDto.getEmail() != null){
-            bootcamp.setEmail(updateBootcampReqDto.getEmail());
         }
 
         if(updateBootcampReqDto.getAddress() != null){
@@ -231,6 +225,82 @@ public class BootcampServiceImpl implements BootcampService {
 
         bootcamp.getPhotos().removeIf((photo) -> photo.getId().equals(photoId));
         bootcampRepo.save(bootcamp);
+        return mapper.map(bootcamp, BootcampResDto.class);
+    }
+
+    @Override
+    public BootcampResDto addEmail(String bootcampId, String email, Authentication authentication) {
+        var bootcamp = bootcampRepo.findById(bootcampId)
+                .orElseThrow(() -> new CampApiException(HttpStatus.NOT_FOUND, String.format("bootcamp with id %s not fonud", bootcampId)));
+
+        var bootcampCreationUser = bootcamp.getUser();
+        var userInRequest = userRepo.findByEmail(authentication.getName())
+                .orElseThrow(() -> new CampApiException(HttpStatus.NOT_FOUND ,String.format("user with email %s not found", authentication.getName())));
+
+        if(!bootcampCreationUser.getEmail().equals(userInRequest.getEmail())){
+            throw new CampApiException(HttpStatus.UNAUTHORIZED, String.format("user is not allowed to update bootcamp with %s", bootcampId));
+        }
+
+        bootcamp.getEmails().add(email);
+        bootcamp = bootcampRepo.save(bootcamp);
+
+        return mapper.map(bootcamp, BootcampResDto.class);
+    }
+
+    @Override
+    public BootcampResDto deleteEmail(String bootcampId, String email, Authentication authentication) {
+        var bootcamp = bootcampRepo.findById(bootcampId)
+                .orElseThrow(() -> new CampApiException(HttpStatus.NOT_FOUND, String.format("bootcamp with id %s not fonud", bootcampId)));
+
+        var bootcampCreationUser = bootcamp.getUser();
+        var userInRequest = userRepo.findByEmail(authentication.getName())
+                .orElseThrow(() -> new CampApiException(HttpStatus.NOT_FOUND ,String.format("user with email %s not found", authentication.getName())));
+
+        if(!bootcampCreationUser.getEmail().equals(userInRequest.getEmail())){
+            throw new CampApiException(HttpStatus.UNAUTHORIZED, String.format("user is not allowed to update bootcamp with %s", bootcampId));
+        }
+
+        bootcamp.getEmails().removeIf(e -> e.equals(email));
+        bootcamp = bootcampRepo.save(bootcamp);
+
+        return mapper.map(bootcamp, BootcampResDto.class);
+    }
+
+    @Override
+    public BootcampResDto addPhone(String bootcampId, String phone, Authentication authentication) {
+        var bootcamp = bootcampRepo.findById(bootcampId)
+                .orElseThrow(() -> new CampApiException(HttpStatus.NOT_FOUND, String.format("bootcamp with id %s not fonud", bootcampId)));
+
+        var bootcampCreationUser = bootcamp.getUser();
+        var userInRequest = userRepo.findByEmail(authentication.getName())
+                .orElseThrow(() -> new CampApiException(HttpStatus.NOT_FOUND ,String.format("user with email %s not found", authentication.getName())));
+
+        if(!bootcampCreationUser.getEmail().equals(userInRequest.getEmail())){
+            throw new CampApiException(HttpStatus.UNAUTHORIZED, String.format("user is not allowed to update bootcamp with %s", bootcampId));
+        }
+
+        bootcamp.getPhones().add(phone);
+        bootcamp = bootcampRepo.save(bootcamp);
+
+        return mapper.map(bootcamp, BootcampResDto.class);
+    }
+
+    @Override
+    public BootcampResDto deletePhone(String bootcampId, String phone, Authentication authentication) {
+        var bootcamp = bootcampRepo.findById(bootcampId)
+                .orElseThrow(() -> new CampApiException(HttpStatus.NOT_FOUND, String.format("bootcamp with id %s not fonud", bootcampId)));
+
+        var bootcampCreationUser = bootcamp.getUser();
+        var userInRequest = userRepo.findByEmail(authentication.getName())
+                .orElseThrow(() -> new CampApiException(HttpStatus.NOT_FOUND ,String.format("user with email %s not found", authentication.getName())));
+
+        if(!bootcampCreationUser.getEmail().equals(userInRequest.getEmail())){
+            throw new CampApiException(HttpStatus.UNAUTHORIZED, String.format("user is not allowed to update bootcamp with %s", bootcampId));
+        }
+
+        bootcamp.getPhones().removeIf(p -> p.equals(phone));
+        bootcamp = bootcampRepo.save(bootcamp);
+
         return mapper.map(bootcamp, BootcampResDto.class);
     }
 }

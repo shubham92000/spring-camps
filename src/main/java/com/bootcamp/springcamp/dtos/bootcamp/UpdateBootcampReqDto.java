@@ -15,8 +15,6 @@ public class UpdateBootcampReqDto {
     private String name;
     private String description;
     private String website;
-    private String phone;
-    private String email;
     private AddressReqDto address;
     private List<String> careers;
     private Boolean housing;
