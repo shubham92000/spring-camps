@@ -1,8 +1,6 @@
 package com.bootcamp.springcamp.controllers;
 
-import com.bootcamp.springcamp.dtos.bootcamp.BootcampResDto;
-import com.bootcamp.springcamp.dtos.bootcamp.CreateBootcampReqDto;
-import com.bootcamp.springcamp.dtos.bootcamp.UpdateBootcampReqDto;
+import com.bootcamp.springcamp.dtos.bootcamp.*;
 import com.bootcamp.springcamp.services.BootcampService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
@@ -75,14 +73,47 @@ public class BootcampController {
     @PutMapping("/{id}/photo")
     public ResponseEntity<BootcampResDto> uploadPhotoForBootcamp(@PathVariable("id") String bootcampId, @RequestParam MultipartFile file, Authentication authentication){
         var response = bootcampService.uploadPhotoForBootcamp(bootcampId, file, authentication);
-        log.info("uploadFile res: "+response);
+        log.info("uploadPhotoForBootcamp res: "+response);
         return ResponseEntity.ok(response);
     }
 
+    @Secured({ "ROLE_PUBLISHER", "ROLE_ADMIN" })
     @DeleteMapping("{id}/photo/{photoId}")
     public ResponseEntity<BootcampResDto> deletePhotoForBootcamp(@PathVariable("id") String bootcampId,@PathVariable("photoId") String photoId, Authentication authentication) {
         var response = bootcampService.deletePhotoForBootcamp(bootcampId, photoId, authentication);
-        log.info("deletePhoto res: "+response);
+        log.info("deletePhotoForBootcamp res: "+response);
+        return ResponseEntity.ok(response);
+    }
+
+    @Secured({ "ROLE_PUBLISHER", "ROLE_ADMIN" })
+    @PutMapping("/{id}/email")
+    public ResponseEntity<BootcampResDto> addEmail(@PathVariable("id") String bootcampId, @Valid @RequestBody EmailReqDto emailReqDto, Authentication authentication){
+        var response = bootcampService.addEmail(bootcampId, emailReqDto.getEmail(), authentication);
+        log.info("addEmail res: "+response);
+        return ResponseEntity.ok(response);
+    }
+
+    @Secured({ "ROLE_PUBLISHER", "ROLE_ADMIN" })
+    @DeleteMapping("{id}/email")
+    public ResponseEntity<BootcampResDto> deleteEmail(@PathVariable("id") String bootcampId, @Valid @RequestBody EmailReqDto emailReqDto, Authentication authentication) {
+        var response = bootcampService.deleteEmail(bootcampId, emailReqDto.getEmail(), authentication);
+        log.info("deleteEmail res: "+response);
+        return ResponseEntity.ok(response);
+    }
+
+    @Secured({ "ROLE_PUBLISHER", "ROLE_ADMIN" })
+    @PutMapping("/{id}/phone")
+    public ResponseEntity<BootcampResDto> addPhone(@PathVariable("id") String bootcampId, @Valid @RequestBody PhoneReqDto phoneReqDto, Authentication authentication){
+        var response = bootcampService.addPhone(bootcampId, phoneReqDto.getPhone(), authentication);
+        log.info("addPhone res: "+response);
+        return ResponseEntity.ok(response);
+    }
+
+    @Secured({ "ROLE_PUBLISHER", "ROLE_ADMIN" })
+    @DeleteMapping("{id}/phone")
+    public ResponseEntity<BootcampResDto> deletePhone(@PathVariable("id") String bootcampId, @Valid @RequestBody PhoneReqDto phoneReqDto, Authentication authentication) {
+        var response = bootcampService.deletePhone(bootcampId, phoneReqDto.getPhone(), authentication);
+        log.info("deletePhone res: "+response);
         return ResponseEntity.ok(response);
     }
 }
