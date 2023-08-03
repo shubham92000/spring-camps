@@ -73,4 +73,9 @@ public class CurrencyServiceImpl implements CurrencyService {
         currencyRepo.deleteById(id);
         return id+" deleted";
     }
+
+    @Override
+    public Boolean currencyValid(String currencyCode) {
+        return currencyRepo.findByCurrencyCode(currencyCode).isPresent();
+    }
 }

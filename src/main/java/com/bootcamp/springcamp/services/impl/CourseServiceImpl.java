@@ -9,6 +9,7 @@ import com.bootcamp.springcamp.repos.BootcampRepo;
 import com.bootcamp.springcamp.repos.CourseRepo;
 import com.bootcamp.springcamp.repos.UserRepo;
 import com.bootcamp.springcamp.services.CourseService;
+import com.bootcamp.springcamp.services.CurrencyService;
 import com.bootcamp.springcamp.utils.Skill;
 import com.bootcamp.springcamp.utils.SkillValue;
 import org.modelmapper.ModelMapper;
@@ -28,12 +29,14 @@ public class CourseServiceImpl implements CourseService {
     private CourseRepo courseRepo;
     private BootcampRepo bootcampRepo;
     private UserRepo userRepo;
+    private CurrencyService currencyService;
 
-    public CourseServiceImpl(ModelMapper mapper, CourseRepo courseRepo, BootcampRepo bootcampRepo, UserRepo userRepo) {
+    public CourseServiceImpl(ModelMapper mapper, CourseRepo courseRepo, BootcampRepo bootcampRepo, UserRepo userRepo, CurrencyService currencyService) {
         this.mapper = mapper;
         this.courseRepo = courseRepo;
         this.bootcampRepo = bootcampRepo;
         this.userRepo = userRepo;
+        this.currencyService = currencyService;
     }
 
     @Override
@@ -68,11 +71,16 @@ public class CourseServiceImpl implements CourseService {
             throw new CampApiException(HttpStatus.NOT_ACCEPTABLE, "skill type is invalid");
         }
 
+        if(!validateCurrencyCode(createCourseReqDto.getCurrencyCode())){
+            throw new CampApiException(HttpStatus.BAD_REQUEST, "the currency code is not supported by the our system");
+        }
+
         var course = new Course();
         course.setTitle(createCourseReqDto.getTitle());
         course.setDescription(createCourseReqDto.getDescription());
         course.setWeeks(createCourseReqDto.getWeeks());
         course.setTuition(createCourseReqDto.getTuition());
+        course.setCurrencyCode(createCourseReqDto.getCurrencyCode());
         course.setMinimumSkill(skill);
         course.setScholarshipAvailable(
                 createCourseReqDto.getScholarshipAvailable() != null
@@ -120,6 +128,13 @@ public class CourseServiceImpl implements CourseService {
             course.setTuition(courseInfo.getTuition());
         }
 
+        if(courseInfo.getCurrencyCode() != null){
+            if(!validateCurrencyCode(courseInfo.getCurrencyCode())){
+                throw new CampApiException(HttpStatus.BAD_REQUEST, "the currency code is not supported by the our system");
+            }
+            course.setCurrencyCode(courseInfo.getCurrencyCode());
+        }
+
         if(courseInfo.getMinimumSkill() != null){
             course.setMinimumSkill(courseInfo.getMinimumSkill());
         }
@@ -136,5 +151,9 @@ public class CourseServiceImpl implements CourseService {
     public String deleteCourse(String courseId) {
         courseRepo.deleteById(courseId);
         return courseId;
+    }
+
+    private Boolean validateCurrencyCode(String currencyCode){
+        return currencyService.currencyValid(currencyCode);
     }
 }

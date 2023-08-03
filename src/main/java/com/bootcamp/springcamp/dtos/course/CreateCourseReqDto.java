@@ -22,6 +22,9 @@ public class CreateCourseReqDto {
     @NotNull(message = "Please add a tuition cost")
     private Double tuition;
 
+    @NotEmpty
+    private String currencyCode;
+
     @NotNull(message = "Please add a minimum skill")
     private String skillType;
 

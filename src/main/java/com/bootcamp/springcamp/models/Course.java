@@ -41,8 +41,8 @@ public class Course {
     @NotNull(message = "Please add a tuition cost")
     private Double tuition;
 
-    @NotNull
-    private String currency;
+    @NotEmpty
+    private String currencyCode;
 
     @NotNull(message = "Please add a minimum skill")
     private Skill minimumSkill;

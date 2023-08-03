@@ -15,6 +15,7 @@ public class UpdateCourseReqDto {
     private String description;
     private String weeks;
     private Double tuition;
+    private String currencyCode;
     private Skill minimumSkill;
     private Boolean scholarshipAvailable;
 }

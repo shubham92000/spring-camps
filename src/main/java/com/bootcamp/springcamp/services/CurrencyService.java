@@ -12,4 +12,6 @@ public interface CurrencyService {
     List<CurrencyResDto> addCurrency(CreateCurrencyReqDto createCurrencyReqDto);
     CurrencyResDto updateCurrency(String id);
     String deleteCurrency(String id);
+
+    Boolean currencyValid(String currencyCode);
 }
