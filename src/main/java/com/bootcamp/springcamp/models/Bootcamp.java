@@ -1,5 +1,6 @@
 package com.bootcamp.springcamp.models;
 
+import com.bootcamp.springcamp.utils.Mode;
 import jakarta.validation.constraints.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -71,6 +72,7 @@ public class Bootcamp {
     private Boolean jobAssistance;
     private Boolean jobGuarantee;
     private Boolean acceptGI;
+    private String mode;
 
     @CreatedDate
     private LocalDateTime createdOn;
@@ -95,5 +97,6 @@ public class Bootcamp {
         this.jobAssistance = false;
         this.jobGuarantee = false;
         this.acceptGI = false;
+        this.mode = Mode.OFFLINE.name();
     }
 }

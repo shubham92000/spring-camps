@@ -13,6 +13,8 @@ import com.bootcamp.springcamp.repos.BootcampRepo;
 import com.bootcamp.springcamp.repos.UserRepo;
 import com.bootcamp.springcamp.services.BootcampService;
 import com.bootcamp.springcamp.services.CareerService;
+import com.bootcamp.springcamp.utils.Mode;
+import com.bootcamp.springcamp.utils.ModeValue;
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
 import org.apache.commons.compress.utils.FileNameUtils;
@@ -96,6 +98,14 @@ public class BootcampServiceImpl implements BootcampService {
 
         if(!bootcampCreationUser.getEmail().equals(userInRequest.getEmail())){
             throw new CampApiException(HttpStatus.UNAUTHORIZED, String.format("user is not allowed to update bootcamp with %s", id));
+        }
+
+
+        if(updateBootcampReqDto.getMode() != null){
+            Mode mode = ModeValue.getMode(updateBootcampReqDto.getMode());
+            if(mode == null){
+                throw new CampApiException(HttpStatus.BAD_REQUEST, String.format("%s mode is now allowed", updateBootcampReqDto.getMode()));
+            }
         }
 
         if(updateBootcampReqDto.getName() != null){

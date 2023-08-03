@@ -21,4 +21,5 @@ public class UpdateBootcampReqDto {
     private Boolean jobAssistance;
     private Boolean jobGuarantee;
     private Boolean acceptGI;
+    private String mode;
 }
