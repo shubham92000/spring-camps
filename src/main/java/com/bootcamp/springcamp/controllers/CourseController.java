@@ -49,7 +49,7 @@ public class CourseController {
 
     @Secured({ "ROLE_PUBLISHER", "ROLE_ADMIN" })
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteCourse(String courseId){
+    public ResponseEntity<String> deleteCourse(@PathVariable(name = "id") String courseId){
         var res = courseService.deleteCourse(courseId);
         return ResponseEntity.ok(res);
     }

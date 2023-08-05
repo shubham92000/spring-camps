@@ -1,5 +1,6 @@
 package com.bootcamp.springcamp;
 
+import com.github.slugify.Slugify;
 import io.minio.MinioClient;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,6 +28,11 @@ public class SpringCampApplication {
 	@Bean
 	public ModelMapper modelMapper(){
 		return new ModelMapper();
+	}
+
+	@Bean
+	public Slugify slugify(){
+		return Slugify.builder().underscoreSeparator(true).build();
 	}
 
 	@Bean
