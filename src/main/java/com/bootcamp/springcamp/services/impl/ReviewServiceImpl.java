@@ -75,6 +75,7 @@ public class ReviewServiceImpl implements ReviewService {
         review.bootcamp = course.getBootcamp();
         review.course = course;
         review.user = user;
+        review.setId(null);
 
         review = reviewRepo.save(review);
 
