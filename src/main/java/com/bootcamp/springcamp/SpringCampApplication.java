@@ -6,8 +6,10 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.mongodb.config.EnableMongoAuditing;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.TimeZone;
 
@@ -25,6 +27,12 @@ public class SpringCampApplication {
 	@Value("${minio.secretKey}")
 	public String minioSecretKey;
 
+	@Value("${geocode.apikey}")
+	public String geocodeApiKey;
+
+	@Value("${geocode.url}")
+	public String geocodeUrl;
+
 	@Bean
 	public ModelMapper modelMapper(){
 		return new ModelMapper();
@@ -33,6 +41,14 @@ public class SpringCampApplication {
 	@Bean
 	public Slugify slugify(){
 		return Slugify.builder().underscoreSeparator(true).build();
+	}
+
+	@Bean
+	public RestTemplate restTemplate(RestTemplateBuilder builder) {
+		return builder
+				.rootUri(geocodeUrl)
+				.defaultHeader("key", geocodeApiKey)
+				.build();
 	}
 
 	@Bean

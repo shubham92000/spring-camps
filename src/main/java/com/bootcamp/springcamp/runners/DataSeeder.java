@@ -1,22 +1,19 @@
 package com.bootcamp.springcamp.runners;
 
-import com.bootcamp.springcamp.models.User;
+import com.bootcamp.springcamp.dtos.geocode.GeocodeResDto;
 import com.bootcamp.springcamp.repos.UserRepo;
-import com.bootcamp.springcamp.utils.Role;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
-
-import java.time.LocalDateTime;
-import java.util.Calendar;
-import java.util.List;
-import java.util.TimeZone;
+import org.springframework.web.client.RestTemplate;
 
 @Component
 public class DataSeeder implements CommandLineRunner {
     private UserRepo userRepo;
+    private RestTemplate restTemplate;
 
-    public DataSeeder(UserRepo userRepo) {
+    public DataSeeder(UserRepo userRepo, RestTemplate restTemplate) {
         this.userRepo = userRepo;
+        this.restTemplate = restTemplate;
     }
 
     @Override
@@ -36,5 +33,8 @@ public class DataSeeder implements CommandLineRunner {
 
 //        Calendar calendar = Calendar.getInstance();
 //        System.out.println("-------------> "+calendar.getTimeZone());
+
+//        GeocodeResDto res = restTemplate.getForObject("/tokyo tower", GeocodeResDto.class);
+//        System.out.println(res);
     }
 }

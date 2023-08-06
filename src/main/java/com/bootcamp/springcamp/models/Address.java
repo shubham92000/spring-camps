@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 public class Address {
     @NotEmpty
     private String buildingInfo;
@@ -29,4 +28,16 @@ public class Address {
     private LocalDateTime createdOn;
     @LastModifiedDate
     private LocalDateTime lastModifiedOn;
+
+    @Override
+    public String toString() {
+        return "Address{" +
+                "buildingInfo='" + buildingInfo + '\'' +
+                ", street='" + street + '\'' +
+                ", city='" + city + '\'' +
+                ", state='" + state + '\'' +
+                ", zipcode='" + zipcode + '\'' +
+                ", country='" + country + '\'' +
+                '}';
+    }
 }
