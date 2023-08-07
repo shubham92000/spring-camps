@@ -30,4 +30,5 @@ public class BootcampResDto {
     private Boolean jobAssistance;
     private Boolean jobGuarantee;
     private Boolean acceptGI;
+    private String mode;
 }

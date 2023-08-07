@@ -150,8 +150,11 @@ public class BootcampServiceImpl implements BootcampService {
         }
 
         bootcamp = bootcampRepo.save(bootcamp);
-
-        return mapper.map(bootcamp, BootcampResDto.class);
+        var response = mapper.map(bootcamp, BootcampResDto.class);
+        if(bootcamp.getLocation() != null){
+            response.setFormattedAddress(bootcamp.getLocation().getFormattedAddress());
+        }
+        return response;
     }
 
     List<String> validateCareer(List<String> requestCareers){

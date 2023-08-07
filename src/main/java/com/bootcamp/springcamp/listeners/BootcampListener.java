@@ -3,6 +3,7 @@ package com.bootcamp.springcamp.listeners;
 import com.bootcamp.springcamp.models.Address;
 import com.bootcamp.springcamp.models.Bootcamp;
 import com.bootcamp.springcamp.models.Course;
+import com.bootcamp.springcamp.models.Location;
 import com.bootcamp.springcamp.services.GeocodeService;
 import com.bootcamp.springcamp.utils.LocationType;
 import com.github.slugify.Slugify;
@@ -52,10 +53,22 @@ public class BootcampListener extends AbstractMongoEventListener<Bootcamp> {
 
         if(event.getSource().getAddress() != null && FETCH_COORDINATES){
             Address addressModel = event.getSource().getAddress();
-            String address = addressModel.getBuildingInfo() + addressModel.getStreet() + addressModel.getCity()
-                    + addressModel.getState() + addressModel.getCountry() + addressModel.getZipcode();
-            event.getSource().getLocation().setFormattedAddress(address);
+            String address = addressModel.getStreet() + " " + addressModel.getCity()
+                    + " " + addressModel.getState() + " " + addressModel.getZipcode();
+            if(event.getSource().getLocation() == null){
+                event.getSource().setLocation(new Location());
+            }
+            event.getSource().getLocation().setFormattedAddress(
+                    addressModel.getBuildingInfo() + "," + addressModel.getStreet() + "," + addressModel.getCity()
+                            + "," + addressModel.getState() + "," + addressModel.getCountry() + "," + addressModel.getZipcode()
+            );
             var coordinates = geocodeService.getCoordinates(address);
+            if(coordinates.getLoc().getLat() == null){
+                coordinates.getLoc().setLat("0.0");
+            }
+            if(coordinates.getLoc().getLon() == null){
+                coordinates.getLoc().setLon("0.0");
+            }
             event.getSource().getLocation().setType(LocationType.Point);
             event.getSource().getLocation().setCoordinates(List.of(
                     Double.parseDouble(coordinates.getLoc().getLon()),
