@@ -8,9 +8,16 @@ import jakarta.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
 
+@Service("geocode_service_mock")
 public class GeocodeServiceMock implements GeocodeService {
     private final Logger log = LoggerFactory.getLogger(GeocodeServiceMock.class);
+
+    @Override
+    public String message() {
+        return "using geocode_service_mock";
+    }
 
     @Override
     public GeocodeResDto getCoordinates(@NotNull String address) {

@@ -8,6 +8,7 @@ import com.bootcamp.springcamp.utils.LocationType;
 import com.github.slugify.Slugify;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.mapping.event.AbstractMongoEventListener;
@@ -28,15 +29,18 @@ public class BootcampListener extends AbstractMongoEventListener<Bootcamp> {
     private GeocodeService geocodeService;
     private Slugify slg;
 
-    @Value("${fetch_coordinates}")
-    private String FETCH_COORDINATES;
+    private Boolean FETCH_COORDINATES;
 
-    public BootcampListener(MongoTemplate mongoTemplate, GeocodeService geocodeService, Slugify slg) {
+    private final String geocode_service = "geocode_service_mock";
+
+    public BootcampListener(MongoTemplate mongoTemplate, @Qualifier(geocode_service) GeocodeService geocodeService, Slugify slg, @Value("${fetch_coordinates}") Boolean fetch_coordinates) {
         super();
         this.mongoTemplate = mongoTemplate;
         this.geocodeService = geocodeService;
         this.slg = slg;
-        log.info("fetch_coordinates: "+Boolean.parseBoolean(FETCH_COORDINATES));
+        FETCH_COORDINATES = fetch_coordinates;
+        log.info("fetch_coordinates: "+FETCH_COORDINATES);
+        log.info("geocode service: "+geocodeService.message());
     }
 
     @Override
@@ -46,7 +50,7 @@ public class BootcampListener extends AbstractMongoEventListener<Bootcamp> {
         String result = slg.slugify(event.getSource().getName());
         event.getSource().setSlug(result);
 
-        if(event.getSource().getAddress() != null && Boolean.parseBoolean(FETCH_COORDINATES)){
+        if(event.getSource().getAddress() != null && FETCH_COORDINATES){
             Address addressModel = event.getSource().getAddress();
             String address = addressModel.getBuildingInfo() + addressModel.getStreet() + addressModel.getCity()
                     + addressModel.getState() + addressModel.getCountry() + addressModel.getZipcode();

@@ -10,13 +10,18 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-@Service
+@Service("geocode_service_impl")
 public class GeocodeServiceImpl implements GeocodeService {
     private final Logger log = LoggerFactory.getLogger(GeocodeServiceImpl.class);
     private RestTemplate restTemplate;
 
     public GeocodeServiceImpl(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
+    }
+
+    @Override
+    public String message() {
+        return "using geocode_service_impl";
     }
 
     @Override
