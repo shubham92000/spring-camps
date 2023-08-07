@@ -8,6 +8,7 @@ import com.bootcamp.springcamp.utils.LocationType;
 import com.github.slugify.Slugify;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.mapping.event.AbstractMongoEventListener;
 import org.springframework.data.mongodb.core.mapping.event.AfterSaveEvent;
@@ -27,13 +28,15 @@ public class BootcampListener extends AbstractMongoEventListener<Bootcamp> {
     private GeocodeService geocodeService;
     private Slugify slg;
 
-    private Boolean FETCH_COORDINATES = false;
+    @Value("${fetch_coordinates}")
+    private String FETCH_COORDINATES;
 
     public BootcampListener(MongoTemplate mongoTemplate, GeocodeService geocodeService, Slugify slg) {
         super();
         this.mongoTemplate = mongoTemplate;
         this.geocodeService = geocodeService;
         this.slg = slg;
+        log.info("fetch_coordinates: "+Boolean.parseBoolean(FETCH_COORDINATES));
     }
 
     @Override
@@ -43,7 +46,7 @@ public class BootcampListener extends AbstractMongoEventListener<Bootcamp> {
         String result = slg.slugify(event.getSource().getName());
         event.getSource().setSlug(result);
 
-        if(event.getSource().getAddress() != null && FETCH_COORDINATES){
+        if(event.getSource().getAddress() != null && Boolean.parseBoolean(FETCH_COORDINATES)){
             Address addressModel = event.getSource().getAddress();
             String address = addressModel.getBuildingInfo() + addressModel.getStreet() + addressModel.getCity()
                     + addressModel.getState() + addressModel.getCountry() + addressModel.getZipcode();
