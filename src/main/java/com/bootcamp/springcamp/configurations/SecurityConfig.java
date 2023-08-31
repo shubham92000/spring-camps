@@ -45,7 +45,10 @@ public class SecurityConfig {
                         authorize
                                 .requestMatchers("/api/auth/me").authenticated()
                                 .requestMatchers(HttpMethod.GET, "/api/**").permitAll()
-                                .requestMatchers("/api/auth/**").permitAll()
+                                .requestMatchers("/api/auth/login").permitAll()
+                                .requestMatchers("/api/auth/register").permitAll()
+                                .requestMatchers("/api/auth/forgotpassword").permitAll()
+                                .requestMatchers("/api/auth/resetpassword/**").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .exceptionHandling(ex ->
