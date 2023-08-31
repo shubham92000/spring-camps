@@ -1,9 +1,8 @@
 package com.bootcamp.springcamp.services.impl;
 
 import com.bootcamp.springcamp.controllers.BootcampController;
-import com.bootcamp.springcamp.dtos.bootcamp.BootcampResDto;
-import com.bootcamp.springcamp.dtos.bootcamp.CreateBootcampReqDto;
-import com.bootcamp.springcamp.dtos.bootcamp.UpdateBootcampReqDto;
+import com.bootcamp.springcamp.dtos.bootcamp.*;
+import com.bootcamp.springcamp.dtos.geocode.GeocodeResDto;
 import com.bootcamp.springcamp.exception.CampApiException;
 import com.bootcamp.springcamp.models.Address;
 import com.bootcamp.springcamp.models.Bootcamp;
@@ -13,6 +12,7 @@ import com.bootcamp.springcamp.repos.BootcampRepo;
 import com.bootcamp.springcamp.repos.UserRepo;
 import com.bootcamp.springcamp.services.BootcampService;
 import com.bootcamp.springcamp.services.CareerService;
+import com.bootcamp.springcamp.services.GeocodeService;
 import com.bootcamp.springcamp.utils.Mode;
 import com.bootcamp.springcamp.utils.ModeValue;
 import io.minio.MinioClient;
@@ -22,6 +22,11 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.geo.*;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.NearQuery;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -41,16 +46,21 @@ public class BootcampServiceImpl implements BootcampService {
     private CareerService careerService;
     private UserRepo userRepo;
     private MinioClient minioClient;
+    private GeocodeService geocodeService;
+
+    private MongoTemplate mongoTemplate;
 
     @Value("${minio.bootcamp.imageUploadBucket}")
     private String imageUploadBucket;
 
-    public BootcampServiceImpl(ModelMapper mapper, BootcampRepo bootcampRepo, CareerService careerService, UserRepo userRepo, MinioClient minioClient) {
+    public BootcampServiceImpl(ModelMapper mapper, BootcampRepo bootcampRepo, CareerService careerService, UserRepo userRepo, MinioClient minioClient, GeocodeService geocodeService, MongoTemplate mongoTemplate) {
         this.mapper = mapper;
         this.bootcampRepo = bootcampRepo;
         this.careerService = careerService;
         this.userRepo = userRepo;
         this.minioClient = minioClient;
+        this.geocodeService = geocodeService;
+        this.mongoTemplate = mongoTemplate;
     }
 
     @Override
@@ -169,6 +179,24 @@ public class BootcampServiceImpl implements BootcampService {
     public String deleteBootcamp(String id) {
         bootcampRepo.deleteById(id);
         return id;
+    }
+
+    @Override
+    public GetBootcampInRadiusResDto getBootcampInRadius(GetBootcampInRadiusReqDto getBootcampInRadiusReqDto) {
+        GeocodeResDto geocodeResDto = geocodeService.getCoordinates(getBootcampInRadiusReqDto.getZipcode());
+        double latitude = Double.parseDouble(geocodeResDto.loc.lat);
+        double longitude = Double.parseDouble(geocodeResDto.loc.lon);
+
+        double radius = Double.parseDouble(getBootcampInRadiusReqDto.getDistance());
+
+        var bootcamps = mongoTemplate.find(Query.query(Criteria.where("location").withinSphere(new Circle(
+            new Point(longitude, latitude), new Distance(radius, Metrics.KILOMETERS)
+        ))), Bootcamp.class, "bootcamps");
+
+        return new GetBootcampInRadiusResDto(
+                (long) bootcamps.size(),
+                bootcamps
+        );
     }
 
     @Override

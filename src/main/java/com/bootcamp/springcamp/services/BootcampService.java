@@ -1,8 +1,6 @@
 package com.bootcamp.springcamp.services;
 
-import com.bootcamp.springcamp.dtos.bootcamp.BootcampResDto;
-import com.bootcamp.springcamp.dtos.bootcamp.CreateBootcampReqDto;
-import com.bootcamp.springcamp.dtos.bootcamp.UpdateBootcampReqDto;
+import com.bootcamp.springcamp.dtos.bootcamp.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -14,6 +12,7 @@ public interface BootcampService {
     public BootcampResDto createBootcamp(CreateBootcampReqDto createBootcampReqDto, Authentication authentication);
     public BootcampResDto updateBootcamp(String id, UpdateBootcampReqDto updateBootcampReqDto, Authentication authentication);
     public String deleteBootcamp(String id);
+    public GetBootcampInRadiusResDto getBootcampInRadius(GetBootcampInRadiusReqDto getBootcampInRadiusReqDto);
     public BootcampResDto uploadPhotoForBootcamp(String bootcampId, MultipartFile file, Authentication authentication);
     public BootcampResDto deletePhotoForBootcamp(String bootcampId, String photoId, Authentication authentication);
     public BootcampResDto addEmail(String bootcampId, String email, Authentication authentication);
