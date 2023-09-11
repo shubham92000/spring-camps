@@ -21,6 +21,7 @@ import org.apache.commons.compress.utils.FileNameUtils;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.geo.*;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -50,10 +51,12 @@ public class BootcampServiceImpl implements BootcampService {
 
     private MongoTemplate mongoTemplate;
 
+    private final String geocode_service = "geocode_service_mock";
+
     @Value("${minio.bootcamp.imageUploadBucket}")
     private String imageUploadBucket;
 
-    public BootcampServiceImpl(ModelMapper mapper, BootcampRepo bootcampRepo, CareerService careerService, UserRepo userRepo, MinioClient minioClient, GeocodeService geocodeService, MongoTemplate mongoTemplate) {
+    public BootcampServiceImpl(ModelMapper mapper, BootcampRepo bootcampRepo, CareerService careerService, UserRepo userRepo, MinioClient minioClient, @Qualifier(geocode_service)  GeocodeService geocodeService, MongoTemplate mongoTemplate) {
         this.mapper = mapper;
         this.bootcampRepo = bootcampRepo;
         this.careerService = careerService;
