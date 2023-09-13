@@ -12,7 +12,23 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import org.slf4j.Logger;
 
-@DataMongoTest
+@DataMongoTest(
+        properties = {
+//                "db_uri=mongodb+srv://shubham:shubham@cluster0.xzpcx63.mongodb.net/spring-camp2?retryWrites=true&w=majority",
+                "jwt-secret=10f6d3ce9d854d1ebfc1ca7d1981fafc122a9970093382f2c5c72cfa6ab47572",
+                "jwt-expiration=606800000",
+                "log_level=DEBUG",
+                "mongo_log_level=DEBUG",
+                "minio_endpoint= ",
+                "minio_port= ",
+                "minio_accessKey= ",
+                "minio_secretKey= ",
+                "minio_image_upload_bucket= ",
+                "geocode_url= ",
+                "geocode_apikey= ",
+                "fetch_coordinates= ",
+        }
+)
 public class BootcampRepoTest {
 
     private Logger logger = LoggerFactory.getLogger(BootcampRepoTest.class);
@@ -27,7 +43,6 @@ public class BootcampRepoTest {
     public void test(){
         assert mongoTemplate!=null;
         assert context!=null;
-//        assert context.getBeanDefinitionCount()==0;
         logger.info("count: -> "+context.getBeanDefinitionCount());
         for(var c: context.getBeanDefinitionNames()){
             System.out.println("--> "+c);

@@ -58,6 +58,7 @@ public class BootcampControllerTest {
         var res = mockMvc.perform(post("/api/v1/bootcamps")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(createBootcampReqDto))
+                .header("Authorization", "Bearer 30fxcjkl")
         );
 
         res.andDo(MockMvcResultHandlers.print());
