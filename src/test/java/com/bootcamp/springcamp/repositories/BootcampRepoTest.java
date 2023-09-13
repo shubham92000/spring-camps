@@ -14,7 +14,6 @@ import org.slf4j.Logger;
 
 @DataMongoTest(
         properties = {
-//                "db_uri=mongodb+srv://shubham:shubham@cluster0.xzpcx63.mongodb.net/spring-camp2?retryWrites=true&w=majority",
                 "jwt-secret=10f6d3ce9d854d1ebfc1ca7d1981fafc122a9970093382f2c5c72cfa6ab47572",
                 "jwt-expiration=606800000",
                 "log_level=DEBUG",
